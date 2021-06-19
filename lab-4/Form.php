@@ -54,7 +54,7 @@
 		}
 		else
 		{
-			$Name = $_POST["Name"];
+			$Name=htmlspecialchars($_POST["Name"]);
 		}
         if(empty($_POST["Username"]))
 		{
@@ -68,11 +68,12 @@
 		}
         elseif(strpos($_POST["Username"], ' ') !== false)
 		{
+			$hasError = true;
             $err_Username= "Space is not allowed in Username";
         }
 		else
 		{
-			$Username = $_POST["Username"];
+			$Username=htmlspecialchars($_POST["Username"]);
 		}
         if(empty($_POST["Password"]))
 		{
@@ -86,6 +87,7 @@
 		}
 		elseif(strpos($_POST["Password"], '#') == false)
 		{
+			$hasError = true;
             $err_Password= "Password must contain # character or one ? character";
 		}
 		else
@@ -190,8 +192,8 @@
 		}
 		if(!isset($_POST["Day"]))
         {
+			$hasError = true;
             $err_Day= "Day required";
-            $hasError = true;
         }
         else
         {
@@ -199,8 +201,8 @@
         }
         if(!isset($_POST["Month"]))
         {
+			$hasError = true;
             $err_Month= "Month required";
-            $hasError = true;
         }
         else
         {
@@ -208,8 +210,8 @@
         }
         if(!isset($_POST["Year"]))
         {
+			$hasError = true;
             $err_Year= "Year required";
-            $hasError = true;
         }
         else
         {
@@ -246,126 +248,126 @@
 	<head></head>
 	<body>
 		<form action="" method="post">
-		<fieldset>
-            <legend><h1>Club Member Registration</h1></legend>
-			<table>
-				<tr>
-					<td align="right">Name:</td>
-					<td><input type="text" name="Name" value="<?php echo $Name; ?>"> </td>
-					<td><span> <?php echo $err_Name;?> </span></td>
-				</tr>
-				<tr>
-					<td align="right">Username:</td>
-					<td><input type="text" name="Username" value="<?php echo $Username; ?>">  </td>
-					<td><span> <?php echo $err_Username;?> </span></td>
-				</tr>
-				<tr>
-					<td align="right">Password:</td>
-					<td><input type="Password" name="Password" value="<?php echo $Password; ?>">  </td>
-					<td><span> <?php echo $err_Password;?> </span></td>
-				</tr>
-                <tr>
-					<td align="right">Confirm Password:</td>
-					<td><input type="Password" name="ConfirmPassword"value="<?php echo $ConfirmPassword; ?>">  </td>
-					<td><span> <?php echo $err_ConfirmPassword;?> </span></td>
-				</tr>
-                <tr>
-					<td align="right">Email:</td>
-					<td><input type="text" name="Email" value="<?php echo $Email; ?>"> </td>
-					<td><span> <?php echo $err_Email;?> </span></td>
-				</tr>
-                <tr>
-					<td align="right">Phone Number:</td>
-					<td><input style="width: 50px" type="text" placeholder="code" name="PhoneCode" value="<?php echo $PhoneCode; ?>"> - <input placeholder="Number" style="width:114px" type="text" name="Phone" value="<?php echo $Phone; ?>"></td>
-					<td><span> <?php echo $err_Phone;?> </span></td>
-				</tr>
-				<tr>
-					<td align="right">Address:</td>
-					<td><input type="text" name="Address" placeholder="Street Address" value="<?php echo $Address; ?>"></td>
-					<td><span> <?php echo $err_Address;?> </span></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td> <input style="width: 65px" type="text" name="City" placeholder="City" value="<?php echo $City; ?>"> - <input style="width:100px" type="text" name="State" placeholder="State" value="<?php echo $State; ?>"></td>
-					<td><span> <?php echo $err_CityState;?> </span></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td><input type="text" name="Postalzipcode" placeholder="Postal/Zip Code" value="<?php echo $Postalzipcode; ?>"></td>
-					<td><span> <?php echo $err_Postalzipcode;?> </span></td>
-				</tr>
-				<tr>
-				<td align="right">Birth Date:</td>
-                    <td><select name="Day" style="width:48px"><option selected disabled>Day</option>
-                        <?php 
-                        for($d=1;$d<=31;$d++)
-                        {
-                            if($d==$Day)
-                            {
-                                echo "<option selected>$d</option>";
-                            }
-                            else
-                            {
-                                echo "<option>$d</option>";
-                            }
-                        }
-                        ?>
-                        </select><span><?php echo $err_Day;?></span>
-                        <select name="Month" style="width:70px"><option selected disabled>Month</option>
-                        <?php
-                            foreach($months as $m)
-                            {
-                                if($m == $Month)
-                                {
-                                    echo "<option selected>$m</option>";
-                                }
-                                else
-                                {
-                                    echo "<option>$m</option>";
-                                }
-                            }
-                        ?>
-                        </select><span><?php echo $err_Month;?></span>
-                        <select name="Year" style="width:52px"><option selected disabled>Year</option>
-                        <?php
-                            for($y=1970;$y<=2021;$y++)
-                            {
-                                if($y==$Year)
-                                {
-                                    echo "<option selected>$y</option>";
-                                }
-                                else
-                                {
-                                    echo "<option>$y</option>";
-                                }
-                            }
-                        ?>
-                        </select><br><span><?php echo $err_Year;?></span></td>
-                    </tr>
-				<tr>
-					<td align="right">Gender: </td>
-					<td><input type="radio" value="Male" <?php if($Gender=="Male") echo "checked"; ?> name="Gender"> Male <input name="Gender" <?php if($Gender=="Female") echo "checked"; ?> value="Female" type="radio"> Female </td>
-					<td><span> <?php echo $err_Gender;?> </span></td>
-				</tr>
-				<tr>
-					<td align="right">Where did you hear<br>about us?</td>
-					<td><input type="checkbox" value="A Friend or Colleague" <?php if(HearExist("A Friend or Colleague")) echo "checked";?> name="Hears[]">A Friend or Colleague<br>
-						<input type="checkbox" value="Google" <?php if(HearExist("Google")) echo "checked";?> name="Hears[]">Google<br>
-					    <input type="checkbox" value="Blog Post" <?php if(HearExist("Blog Post")) echo "checked";?> name="Hears[]">Blog Post<br>
-						<input type="checkbox" value="News Article" <?php if(HearExist("News Article")) echo "checked";?> name="Hears[]">News Article<br>
-						<span><?php echo $err_Hears;?></span></td>
-				</tr>
-				<tr>
-					<td align="right">Bio: </td>
-					<td><textarea name="Bio" rows="2" cols="22"><?php echo $Bio; ?></textarea>
-					<td><span> <?php echo $err_Bio;?> </span></td>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="2" align="center"><input type="submit" name="submit" value="register"></td>
-				</tr>
-			</table>
-		</fieldset>
+			<fieldset>
+				<legend><h1>Club Member Registration</h1></legend>
+				<table>
+					<tr>
+						<td align="right">Name:</td>
+						<td><input type="text" name="Name" value="<?php echo $Name; ?>"></td>
+						<td><span> <?php echo $err_Name;?> </span></td>
+					</tr>
+					<tr>
+						<td align="right">Username:</td>
+						<td><input type="text" name="Username" value="<?php echo $Username; ?>"></td>
+						<td><span> <?php echo $err_Username;?> </span></td>
+					</tr>
+					<tr>
+						<td align="right">Password:</td>
+						<td><input type="Password" name="Password" value="<?php echo $Password; ?>"></td>
+						<td><span> <?php echo $err_Password;?> </span></td>
+					</tr>
+					<tr>
+						<td align="right">Confirm Password:</td>
+						<td><input type="Password" name="ConfirmPassword"value="<?php echo $ConfirmPassword; ?>"></td>
+						<td><span> <?php echo $err_ConfirmPassword;?> </span></td>
+					</tr>
+					<tr>
+						<td align="right">Email:</td>
+						<td><input type="text" name="Email" value="<?php echo $Email; ?>"></td>
+						<td><span> <?php echo $err_Email;?> </span></td>
+					</tr>
+					<tr>
+						<td align="right">Phone Number:</td>
+						<td><input style="width: 50px" type="text" placeholder="code" name="PhoneCode" value="<?php echo $PhoneCode; ?>"> - <input placeholder="Number" style="width:114px" type="text" name="Phone" value="<?php echo $Phone; ?>"></td>
+						<td><span> <?php echo $err_Phone;?> </span></td>
+					</tr>
+					<tr>
+						<td align="right">Address:</td>
+						<td><input type="text" name="Address" placeholder="Street Address" value="<?php echo $Address; ?>"></td>
+						<td><span> <?php echo $err_Address;?> </span></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td> <input style="width: 65px" type="text" name="City" placeholder="City" value="<?php echo $City; ?>"> - <input style="width:100px" type="text" name="State" placeholder="State" value="<?php echo $State; ?>"></td>
+						<td><span> <?php echo $err_CityState;?> </span></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><input type="text" name="Postalzipcode" placeholder="Postal/Zip Code" value="<?php echo $Postalzipcode; ?>"></td>
+						<td><span> <?php echo $err_Postalzipcode;?> </span></td>
+					</tr>
+					<tr>
+					<td align="right">Birth Date:</td>
+						<td><select name="Day" style="width:48px"><option selected disabled>Day</option>
+							<?php 
+							for($d=1;$d<=31;$d++)
+							{
+								if($d==$Day)
+								{
+									echo "<option selected>$d</option>";
+								}
+								else
+								{
+									echo "<option>$d</option>";
+								}
+							}
+							?>
+							</select><span><?php echo $err_Day;?></span>
+							<select name="Month" style="width:70px"><option selected disabled>Month</option>
+							<?php
+								foreach($months as $m)
+								{
+									if($m == $Month)
+									{
+										echo "<option selected>$m</option>";
+									}
+									else
+									{
+										echo "<option>$m</option>";
+									}
+								}
+							?>
+							</select><span><?php echo $err_Month;?></span>
+							<select name="Year" style="width:52px"><option selected disabled>Year</option>
+							<?php
+								for($y=1970;$y<=2021;$y++)
+								{
+									if($y==$Year)
+									{
+										echo "<option selected>$y</option>";
+									}
+									else
+									{
+										echo "<option>$y</option>";
+									}
+								}
+							?>
+							</select><br><span><?php echo $err_Year;?></span></td>
+						</tr>
+					<tr>
+						<td align="right">Gender: </td>
+						<td><input type="radio" value="Male" <?php if($Gender=="Male") echo "checked"; ?> name="Gender"> Male <input name="Gender" <?php if($Gender=="Female") echo "checked"; ?> value="Female" type="radio"> Female </td>
+						<td><span> <?php echo $err_Gender;?> </span></td>
+					</tr>
+					<tr>
+						<td align="right">Where did you hear<br>about us?</td>
+						<td><input type="checkbox" value="A Friend or Colleague" <?php if(HearExist("A Friend or Colleague")) echo "checked";?> name="Hears[]">A Friend or Colleague<br>
+							<input type="checkbox" value="Google" <?php if(HearExist("Google")) echo "checked";?> name="Hears[]">Google<br>
+							<input type="checkbox" value="Blog Post" <?php if(HearExist("Blog Post")) echo "checked";?> name="Hears[]">Blog Post<br>
+							<input type="checkbox" value="News Article" <?php if(HearExist("News Article")) echo "checked";?> name="Hears[]">News Article<br>
+							<span><?php echo $err_Hears;?></span></td>
+					</tr>
+					<tr>
+						<td align="right">Bio: </td>
+						<td><textarea name="Bio" rows="2" cols="22"><?php echo $Bio; ?></textarea>
+						<td><span> <?php echo $err_Bio;?> </span></td>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" align="center"><input type="submit" name="submit" value="register"></td>
+					</tr>
+				</table>
+			</fieldset>
 		</form>
 	</body>
 </html>
